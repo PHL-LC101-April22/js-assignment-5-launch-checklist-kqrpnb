@@ -18,7 +18,7 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
 
 function validateInput(testInput) {
     //if testInput is empty, return "Empty"
-    console.log(testInput);
+    // console.log(testInput);
     if (testInput === undefined || testInput === "") {
         return "Empty";
     };
@@ -37,9 +37,141 @@ function validateInput(testInput) {
    
 }
 
-function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-    let form = document.querySelector("launchForm");
+function formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass) {
+    // let form = document.querySelector("launchForm");
 
+    let pilotLI = document.getElementById("pilotStatus");
+    let copilotLI = document.getElementById("copilotStatus");
+    let fuelLI = document.getElementById("fuelStatus");
+    let cargoLI = document.getElementById("cargoStatus");
+    let launchStatus = document.getElementById("launchStatus");
+    
+    let readyStatus = {
+        pilotReady: false,
+        copilotReady: false,
+        fuelReady: false,
+        cargoReady: false,
+        status: false,
+        confirm: function() {
+            let faults = [];
+
+            if (this.pilotReady === true) {
+                this.status = true;
+            } else {
+                // console.log('faults.push');
+                faults.push('Pilot');
+                this.status = false;
+            }
+
+            if (this.copilotReady === true) {
+                this.status = true;
+            } else {
+                faults.push('Copilot');
+                this.status = false;
+            }
+
+            if (this.fuelReady === true) {
+                this.status = true;
+            } else {
+                faults.push('Fuel');
+                this.status = false;
+            }
+            
+            if (this.cargoReady === true) {
+                this.status = true;
+            } else {
+                faults.push('Cargo');
+                this.status = false;
+            }
+            return faults;
+        }
+    };
+
+    // console.log(validateInput(pilot));
+    // console.log(validateInput(copilot));
+    // console.log(validateInput(fuelLevel));
+    // console.log(Number(fuelLevel));
+    // console.log(validateInput(cargoMass));
+    // console.log(Number(cargoMass));
+
+    // if/else sets alert = message, then give alert outside of if else
+    //check for perfect condition, then use else to add what's wrong to an alert array
+    //then print out array
+
+    if (validateInput(pilot) === "Not a Number") {
+        readyStatus.pilotReady = true;
+        pilotLI.style.color = '';
+    } else {
+        readyStatus.pilotReady = false;
+        pilotLI.style.color = 'red';
+    }
+    if (validateInput(copilot) === "Not a Number") {
+        readyStatus.copilotReady = true;
+        copilotLI.style.color = '';
+    } else {
+        readyStatus.copilotReady = false;
+        copilotLI.style.color = 'red';
+    }
+
+    if (validateInput(fuelLevel) === "Is a Number") {
+        if (Number(fuelLevel) < 10000) {
+            readyStatus.fuelReady = false;
+            fuelLI.style.color = 'red';
+        } else {
+            readyStatus.fuelReady = true;
+            fuelLI.style.color = '';
+        }
+    }
+    if (validateInput(cargoMass) === "Is a Number") {
+        if (Number(cargoMass) > 10000) {
+            readyStatus.cargoReady = false;
+            cargoLI.style.color = 'red';
+        } else {
+            readyStatus.cargoReady = true;
+        }
+    }
+
+    let alerts = readyStatus.confirm();
+    for (let i = 0; i < alerts.length; i++) {
+        console.log(alerts[i]);
+    }
+    // console.log(alerts);
+
+    if (alerts.length === 0) {
+        // readyStatus.status = true;
+        list.style.visibility = 'hidden';
+        launchStatus.style.color = 'green';
+        launchStatus.innerHTML = 'Shuttle is ready for launch!'
+
+        let throwAlert = function() {
+            let 
+        }
+
+    } else {
+        let message = 'Make sure to enter valid information for each field.';
+        let arr = [];
+        for (let k = 0; k < alerts.length; k++) {
+            arr = message.split();
+            arr.push(alerts[k]);
+            message = arr.join('\n');
+        }
+        alert(message);
+        // throwAlert();        
+        list.style.visibility = 'visible';
+        pilotLI.innerHTML = `Pilot ready: ${readyStatus.pilotReady}`;
+        copilotLI.innerHTML = `Copilot ready: ${readyStatus.copilotReady}`;
+        fuelLI.innerHTML = `Fuel level high enough for launch: ${readyStatus.fuelReady}`;
+        cargoLI.innerHTML = `Cargo mass low enough for launch: ${readyStatus.cargoReady}`;
+    }
+
+
+
+    // if (pilotReady === true && copilotReady === true && fuelReady === true && cargoReady === true) {
+    //     statusColor = 'green';
+    //     readyStatus = true;
+    //     pilotLI.innerHTML = 'Pilot ${pilot} is ready.';
+    //     copilotLI.innerHTML = 'Copilot ${copilot} is ready.'
+    // }
 }
 
 async function myFetch() {
@@ -54,8 +186,8 @@ async function myFetch() {
 function pickPlanet(planets) {
 }
 
-// module.exports.addDestinationInfo = addDestinationInfo;
-// module.exports.validateInput = validateInput;
-// module.exports.formSubmission = formSubmission;
-// module.exports.pickPlanet = pickPlanet; 
-// module.exports.myFetch = myFetch;
+module.exports.addDestinationInfo = addDestinationInfo;
+module.exports.validateInput = validateInput;
+module.exports.formSubmission = formSubmission;
+module.exports.pickPlanet = pickPlanet; 
+module.exports.myFetch = myFetch;

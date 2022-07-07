@@ -11,17 +11,18 @@ window.addEventListener("load", function() {
         let copilot = document.querySelector("input[name=copilotName]");
         let fuelLevel = document.querySelector("input[name=fuelLevel]");
         let cargoMass = document.querySelector("input[name=cargoMass]");
+        let list = document.getElementById("faultyItems");
 
-        formSubmission(document, )
+        if (pilot.value !== "" && copilot.value !== "" && fuelLevel.value !== "" && cargoMass.value !== "") { //why wait to check for empties in formSubmission()?
 
-        // console.log(pilot.value, copilot.value, fuelLevel.value, cargoMass.value);
+            event.preventDefault();
+            formSubmission(document, list, pilot.value, copilot.value, fuelLevel.value, cargoMass.value)
+        } else {
+            event.preventDefault();
+            alert("All fields required.");
+            list.style.visibility = 'hidden';
+        }
 
-        // console.log(validateInput(pilot.validateInput));
-        // console.log(validateInput(copilot.value));
-        // console.log(validateInput(fuelLevel.value));
-        // console.log(validateInput(cargoMass.value));
-
-        event.preventDefault();
     })
 
 //    let listedPlanets;
